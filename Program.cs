@@ -6,16 +6,19 @@ class Program
     static async Task Main(string[] args)
     {
         // 配置ChatGLM
-        string url = "https://open.bigmodel.cn/api/paas/v4/";  // 修改为基础URL
-        string apiKey = "Bearer c707cc7686924318b7fded7a1f7fa296.sSzbgplK46AOpR7C";  // API密钥
+        string url = "https://open.bigmodel.cn/api/paas/v4/";  // 基础URL
+        string apiKey = "c707cc7686924318b7fded7a1f7fa296.sSzbgplK46AOpR7C";
+        // 智谱AI的API密钥格式说明
+    
 
         // 创建ChatGLM实例
         var chatGLM = new ChatGLM(url, apiKey);
 
-        Console.WriteLine("欢迎使用ChatGLM聊天程序！");
+        Console.WriteLine("\n欢迎使用ChatGLM聊天程序！");
+        Console.WriteLine("您可以尝试以下测试用例：");
+        Console.WriteLine("1. 查询航班：'我想查询从北京到上海明天的航班'");
+        Console.WriteLine("2. 查询票价：'MU2331明天的机票多少钱'");
         Console.WriteLine("输入 'exit' 退出程序\n");
-
-        string history = "";  // 用于存储对话历史
 
         while (true)
         {
@@ -27,21 +30,10 @@ class Program
 
             try
             {
+                Console.WriteLine("正在请求API，请稍候...");
                 // 发送消息并获取响应
-                string response = await chatGLM.Chat(input, history);
+                string response = await chatGLM.Chat(input);
                 Console.WriteLine($"ChatGLM: {response}\n");
-
-                // 更新对话历史
-                if (string.IsNullOrEmpty(history))
-                {
-                    history = $"[[\"${input}\", \"{response}\"]]";
-                }
-                else
-                {
-                    // 移除最后的 ']' 并添加新的对话
-                    history = history.TrimEnd(']');
-                    history += $", [\"{input}\", \"{response}\"]]";
-                }
             }
             catch (Exception ex)
             {
